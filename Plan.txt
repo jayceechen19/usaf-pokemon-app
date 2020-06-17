@@ -1,0 +1,62 @@
+STORIES:
+
+// DOM RENDERS
+
+1. As a user, I want to be able to search for a specific Pokemon so that I can see all of the important/relevant information about them.
+
+// Form where user makes API request to pokeapi for specific pokemon, returns info
+
+2. As a user (who is new to Pokemon and doesn’t know any names to search!), I want to click on a “View All” (or similar) button and look at page with pictures of all the pokemon so that I can click on the picture and learn more about them! 
+
+// API Request for all Pokemon; https://pokeapi.co/api/v2/pokemon/{num < 964}
+// For each pokemon display sprite on page: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png
+        {sprite}.back_default
+        Make a button wrapper w/ img
+
+3. As a user I want to click on a “View similar types” button for a specific pokemon and I will see a list of other pokemon with the same type.
+4. As a user, I want each Pokemon to have a  “collect” feature so that I can add it to my collection if I like it.
+5. As a user, I want to have a “view collection” feature so that I can view my whole collection at any time 
+6. As a user, I want there to be a “battle” feature where I can see who would win between two Pokemon  (here, you can select two Pokemon and have them battle, and based on some criteria, you determine the winner)
+7. As a user, I want there to be a “Grocery List” feature that tells me all the foods I need to buy when I go to the store so that I can feed my Pokemon! 
+
+App (parent stats, all the arrays we want)
+    -PokemonComponent: parent stats (props) + personal stats (this.stats == props.stats)
+    -Pokemon: info + add to collection => update collection (props.stats.update())
+    -BattleComponent:
+    //GET THE https://pokeapi.co/api/v2/{id or name}.stats
+    -Groceries: look at collection, see what food each pokemon needs, add to list
+    https://pokeapi.co/api/v2/berry/{id or name}/
+    
+    // GET THE FLAVOR THE POKEMON LIKES - https://pokeapi.co/api/v2/nature/{id or name}/
+    // GET THE BERRY THAT HAS THE FLAVOR - likes_flavor.url
+     https://pokeapi.co/api/v2/berry-flavor/{id or name}/
+
+//TODOs
+
+THINGS TO STORE/PASS
+grocery list, your pokemon
+
+HOME page
+Components needed:
+    - Search
+    - View All
+    - View Collection
+    - Battle
+    - View Grocery List
+
+POKEMON INFO page
+Components Needed:
+    - information
+    - collect
+    - View Similar types
+
+BATTLE page
+Components Needed:
+    -List of all Pokemon x 2
+    -Display Winner
+//API:  https://pokeapi.co/api/v2/type/{id or name}/
+> damage_relations -> half_damage_to [] -> no_damage_to []
+
+GROCERY LIST page
+Components needed:
+    -Grocery List
