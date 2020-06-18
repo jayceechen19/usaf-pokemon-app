@@ -31,6 +31,15 @@ App (parent stats, all the arrays we want)
     // GET THE BERRY THAT HAS THE FLAVOR - likes_flavor.url
      https://pokeapi.co/api/v2/berry-flavor/{id or name}/
 
+    // Berry-Flavor - List of berries that have this flavor
+    //{"berry":{"name":"rowap","url":"https://pokeapi.co/api/v2/berry/64/"},"potency":10}
+    // natures -> likes_flavor.url -> fetch (url) -> berries [] -> berry.name
+    /*
+    1)Pull information from /pokemon page
+    2)Pull images
+    3)Pull flavros from /nature page & edit pokemonData
+    */
+
 //TODOs
 
 THINGS TO STORE/PASS

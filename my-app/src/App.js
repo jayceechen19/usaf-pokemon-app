@@ -1,12 +1,16 @@
+//Functionality
 import React, {Component} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+//CSS
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+//Components
 import Navigation from './Navigation'
 import HomeComponent from './HomeComponent.js'
 import PokeComponent from './PokeComponent.js'
 import BattleComponent from './BattleComponent.js'
 
+//APIs
 const POKEMON_API = 'https://pokeapi.co/api/v2/pokemon/';
 const IMAGE_API = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'
 const NATURE_API = 'https://pokeapi.co/api/v2/nature/'
@@ -15,32 +19,41 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
+      //*DESCRIPTION: An array that stores the indexes of all the pokemon the user adds to 'My Collection'
+      //Array = [id1, id2, id3, ...]
+      //todo: not initialized yet
       collection: [],
+
+      //*DESCRIPTION: An array that stores the berries that we need for each pokemon
+      //todo: not initialized yet, unsure depends on what is defined as food
       groceryList: [],
-      // [image]
-		  pokemonImages: [],
+
+      //* DESCRIPTION: An array that stores the photos of the pokemon 
+      // Array = [image, image, image, ....]
+      pokemonImages: [],
+
+      //* DESCRIPTION: An array of pokemon IDs. We use this to help us pull data from the APIs
+      //See below
       pokemonIDs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-      //[name]
+
+      //*DESCRIPTION: An array of pokemon names. Names are indexed for each pokemon at index = id - 1
+      //Array = [name for ID 1, name for ID 2,...]
       pokemonNames: [],
-      //[index = id -1 [...berries]] https://pokeapi.co/api/v2/berry-flavor/1
+
+      //*DESCRIPTION: An array of pokemon berries. Berries are indexed for each pokemon at index = id - 1
+      //API link: https://pokeapi.co/api/v2/berry-flavor/1
+      // Array = [array of berries for ID 1, array of berries for ID 2....]
       pokemonBerries: []
-      //Array([weak to], [weak to])
+      //
     }
   }
 
-// Berry-Flavor - List of berries that have this flavor
-//{"berry":{"name":"rowap","url":"https://pokeapi.co/api/v2/berry/64/"},"potency":10}
-// natures -> likes_flavor.url -> fetch (url) -> berries [] -> berry.name
-  /*
-  1)Pull information from /pokemon page
-  2)Pull images
-  3)Pull flavros from /nature page & edit pokemonData
-  */
-  
+  //*Once the component is created, initialize this.state
   componentDidMount(){
      //Fulfilling a promise for each index/id
      Promise.all(this.state.pokemonIDs)
      .then(indexArray =>{
+       //*WORKING CODE
        //Associating names to id
        indexArray.forEach(index =>{
          fetch(`${POKEMON_API}${index}`)
@@ -49,14 +62,27 @@ class App extends Component {
            this.setState({pokemonNames: [...this.state.pokemonNames, data.name]})
          })
        })
-       //TODO: Berries are returning 
+       //*WORKING CODE
+      //initializing images
+       indexArray.forEach(index =>{
+         fetch(`${IMAGE_API}${index}.png`)
+         .then(response => response.blob())
+         .then(data =>{
+           var url = URL.createObjectURL(data)
+           this.setState({pokemonImages: [...this.state.pokemonImages, url]})
+         })
+       })
+       //TODO: Get pokemon types
+       //TODO: Berries are returning empty arra -> Katie said she would address what exactly was wrong tomorrow
+       //? Had something to do with NATURE_API and ID #s?
+       
        //initializing berries
        // natures -> likes_flavor.url -> fetch (url) -> berries [] -> berry.name
+       /*
        indexArray.forEach(index =>{
         fetch(`${NATURE_API}${index}`)
         .then(response => response.json())
         .then(data =>{
-          
           //If Pokemon likes no flavor, assign the state for it to be an empty array
           if (data.likes_flavor === null){
             this.setState({pokemonBerries: [...this.state.pokemonBerries, []]})
@@ -77,20 +103,9 @@ class App extends Component {
                 //Setting the berry array in this.state
                 this.setState({pokemonBerries: [...this.state.pokemonBerries, berryNames]})
             })
-          }
-
-          
+          }    
         })
-      })
-      //initializing images
-       indexArray.forEach(index =>{
-         fetch(`${IMAGE_API}${index}.png`)
-         .then(response => response.blob())
-         .then(data =>{
-           var url = URL.createObjectURL(data)
-           this.setState({pokemonImages: [...this.state.pokemonImages, url]})
-         })
-       })
+      })*/
      })
   }
 
