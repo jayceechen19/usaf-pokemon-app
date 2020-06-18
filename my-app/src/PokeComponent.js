@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-import Pokemon from "./Pokemon.js";
 
 
 class PokeComponent extends React.Component {
@@ -11,17 +10,18 @@ class PokeComponent extends React.Component {
 	}
 
 	render() {
+		console.log(this.state)
+
 		return (
 			<div>
 				{this.state.pokemonIDs.map( (id)=>{
 					var index = id - 1
 					return (
 					//Passes props.state and props.id to the next page
-					<Link to= {`/${this.state.pokemonNames[index]}`} 
-					onclick = {() => <Pokemon state = {this.state} id = {index}/>}>
+					<Link to= {`/${this.state.pokemonData[index].name}`}>
 							<Button variant = "light">
-								<h3>{this.state.pokemonNames[index]}</h3>
-								<img src = {this.state.pokemonImages[index]}/>
+								<h3>{this.state.pokemonData[index].name}</h3>
+								<img src = {this.state.pokemonData[index].image}/>
 							</Button>
 					</Link>
 					)

@@ -9,11 +9,10 @@ import Navigation from './Navigation'
 import HomeComponent from './HomeComponent.js'
 import PokeComponent from './PokeComponent.js'
 import BattleComponent from './BattleComponent.js'
+import Pokemon from './Pokemon.js'
 
 //APIs
 const POKEMON_API = 'https://pokeapi.co/api/v2/pokemon/';
-const IMAGE_API = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'
-const NATURE_API = 'https://pokeapi.co/api/v2/nature/'
 
 class App extends Component {
   constructor(props){
@@ -28,23 +27,18 @@ class App extends Component {
       //todo: not initialized yet, unsure depends on what is defined as food
       groceryList: [],
 
-      //* DESCRIPTION: An array that stores the photos of the pokemon 
-      // Array = [image, image, image, ....]
-      pokemonImages: [],
-
       //* DESCRIPTION: An array of pokemon IDs. We use this to help us pull data from the APIs
       //See below
       pokemonIDs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
 
-      //*DESCRIPTION: An array of pokemon names. Names are indexed for each pokemon at index = id - 1
-      //Array = [name for ID 1, name for ID 2,...]
+      //* DESCRIPTION: An array of pokemon Names
       pokemonNames: [],
-
-      //*DESCRIPTION: An array of pokemon berries. Berries are indexed for each pokemon at index = id - 1
-      //API link: https://pokeapi.co/api/v2/berry-flavor/1
-      // Array = [array of berries for ID 1, array of berries for ID 2....]
-      pokemonBerries: []
-      //
+      //*DESCRIPTION: An array of pokemon data.
+      /*Array = [
+          Object{ id = #, name = '', image = '', types = [], moves =[]}
+      ]
+      */
+      pokemonData : []
     }
   }
 
@@ -59,54 +53,33 @@ class App extends Component {
          fetch(`${POKEMON_API}${index}`)
          .then(response => response.json())
          .then(data =>{
-           this.setState({pokemonNames: [...this.state.pokemonNames, data.name]})
-         })
+          //Add to the pokemon names
+          this.setState([...this.state.pokemonNames, data.name]) 
+          //Getting all the images URLS
+           var imageURL = data.sprites.front_default
+           //Getting all the types
+           var typeArray = []
+           for(var index in data.types){
+            typeArray.push(data.types[index].type.name)
+          }
+          //Gettng all the moves
+           var moveArray = []
+           for(var index in data.moves){
+             moveArray.push(data.moves[index].move.name)
+           }
+           //Creating an object to store
+           var newObj = {
+             id: data.id,
+             name: data.name,
+             image: imageURL,
+             type: typeArray,
+             moves: moveArray
+           }
+           //Adding the object to the data
+           this.setState((state) => ({pokemonData: [...state.pokemonData, newObj]}))
+          })
        })
-       //*WORKING CODE
-      //initializing images
-       indexArray.forEach(index =>{
-         fetch(`${IMAGE_API}${index}.png`)
-         .then(response => response.blob())
-         .then(data =>{
-           var url = URL.createObjectURL(data)
-           this.setState({pokemonImages: [...this.state.pokemonImages, url]})
-         })
-       })
-       //TODO: Get pokemon types
-       //TODO: Berries are returning empty arra -> Katie said she would address what exactly was wrong tomorrow
-       //? Had something to do with NATURE_API and ID #s?
-       
-       //initializing berries
-       // natures -> likes_flavor.url -> fetch (url) -> berries [] -> berry.name
-       /*
-       indexArray.forEach(index =>{
-        fetch(`${NATURE_API}${index}`)
-        .then(response => response.json())
-        .then(data =>{
-          //If Pokemon likes no flavor, assign the state for it to be an empty array
-          if (data.likes_flavor === null){
-            this.setState({pokemonBerries: [...this.state.pokemonBerries, []]})
-          }else{
-            //extracting the URL
-            var berryURL = data.likes_flavor.url
-            //Getting the berry info
-            fetch(`${berryURL}`)
-            .then(response => response.json())
-            .then(data =>{
-                //API stores berries as an array []
-                var berryArray = data.berries
-                //Extracting just the berry names
-                var berryNames = []
-                for (var berry in berryArray){
-                  berryNames.push(berryArray[berry].berry.name)
-                }
-                //Setting the berry array in this.state
-                this.setState({pokemonBerries: [...this.state.pokemonBerries, berryNames]})
-            })
-          }    
-        })
-      })*/
-     })
+    })
   }
 
 
@@ -114,10 +87,18 @@ class App extends Component {
     return (
       <BrowserRouter>
       <div className = "App">
+          {/* Creates the navigation buttons */}
           <Navigation/>
+          {/* Creates the routes/ sub-pages */}
           <Switch>
             <Route path = "/home" component = {HomeComponent}/>
             <Route path = "/viewall" component = {() => <PokeComponent state = {this.state}/>}/>
+            {/* Create a route path for each pokemon, call on pokemon & pass in the pokemon */}
+            {/* Map pokemon IDs, use the id to pull the correct index from pokemon/name */}
+            {this.state.pokemonIDs.map(id => {
+                  return <Route path = {`/${this.state.pokemonNames[id-1]}`} component = {() => 
+                  <Pokemon state = {this.state} id = {id}/>}/>
+            })}
             <Route path = "/mycollection" component = {PokeComponent}/>
             <Route path = "/battle" component = {() =><BattleComponent state = {this.state}/>}/>
             <Route path = "/groceries" component = {PokeComponent}/>
@@ -126,7 +107,6 @@ class App extends Component {
       </BrowserRouter>
     );
   }
-  
 }
 
 export default App;
