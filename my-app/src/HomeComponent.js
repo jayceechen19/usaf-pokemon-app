@@ -7,8 +7,7 @@ import Navigation from './Navigation'
 class HomeComponent extends React.Component {
     render(){
         return (
-            <div>
-            </div>
+            <div> An Empty Home Page</div>
         )
     }
 }

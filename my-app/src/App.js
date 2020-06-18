@@ -20,26 +20,22 @@ class App extends Component {
     this.state = {
       //*DESCRIPTION: An array that stores the indexes of all the pokemon the user adds to 'My Collection'
       //Array = [id1, id2, id3, ...]
-      //todo: not initialized yet
       collection: [],
-
-      //*DESCRIPTION: An array that stores the berries that we need for each pokemon
-      //todo: not initialized yet, unsure depends on what is defined as food
-      groceryList: [],
-
       //* DESCRIPTION: An array of pokemon IDs. We use this to help us pull data from the APIs
       //See below
       pokemonIDs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-
       //* DESCRIPTION: An array of pokemon Names
       pokemonNames: [],
       //*DESCRIPTION: An array of pokemon data.
-      /*Array = [
-          Object{ id = #, name = '', image = '', types = [], moves =[]}
-      ]
-      */
+      /*Array = [Object{ id = #, name = '', image = '', type = [], moves =[]}]*/
       pokemonData : []
     }
+    this.addToCollection = this.addToCollection.bind(this)
+  }
+
+  addToCollection(pokemon){
+    this.collection = [...this.state.collection, pokemon]
+    console.log(this.collection)
   }
 
   //*Once the component is created, initialize this.state
@@ -54,7 +50,7 @@ class App extends Component {
          .then(response => response.json())
          .then(data =>{
           //Add to the pokemon names
-          this.setState([...this.state.pokemonNames, data.name]) 
+          this.setState({pokemonNames:[...this.state.pokemonNames, data.name]}) 
           //Getting all the images URLS
            var imageURL = data.sprites.front_default
            //Getting all the types
@@ -67,13 +63,16 @@ class App extends Component {
            for(var index in data.moves){
              moveArray.push(data.moves[index].move.name)
            }
+           //Getting the pokemon attack stat
+           var attackStat = data.stats[1].base_stat
            //Creating an object to store
            var newObj = {
              id: data.id,
              name: data.name,
              image: imageURL,
              type: typeArray,
-             moves: moveArray
+             moves: moveArray,
+             attackStat: attackStat
            }
            //Adding the object to the data
            this.setState((state) => ({pokemonData: [...state.pokemonData, newObj]}))
@@ -91,13 +90,14 @@ class App extends Component {
           <Navigation/>
           {/* Creates the routes/ sub-pages */}
           <Switch>
+            {/* Routes just create url paths, doesn't specify the directory */}
             <Route path = "/home" component = {HomeComponent}/>
             <Route path = "/viewall" component = {() => <PokeComponent state = {this.state}/>}/>
             {/* Create a route path for each pokemon, call on pokemon & pass in the pokemon */}
             {/* Map pokemon IDs, use the id to pull the correct index from pokemon/name */}
             {this.state.pokemonIDs.map(id => {
                   return <Route path = {`/${this.state.pokemonNames[id-1]}`} component = {() => 
-                  <Pokemon state = {this.state} id = {id}/>}/>
+                  <Pokemon state = {this.state} id = {id} collect = {this.addToCollection}/>}/>
             })}
             <Route path = "/mycollection" component = {PokeComponent}/>
             <Route path = "/battle" component = {() =><BattleComponent state = {this.state}/>}/>

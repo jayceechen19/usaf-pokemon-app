@@ -1,8 +1,6 @@
 import React from 'react';
 //React Bootstrap that formats things nicely
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
-
 
 class BattleComponent extends React.Component {
     constructor(props){
@@ -10,27 +8,41 @@ class BattleComponent extends React.Component {
         this.state = props.state
         this.state.pokemon1 = ""
         this.state.pokemon2 = ""
+        this.state.winner = ""
 
+        this.buttonclicked = false
         this.handleChangeOne = this.handleChangeOne.bind(this)
         this.handleChangeTwo = this.handleChangeTwo.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
+
     //*Event Handler for selecting Pokemon 1
     handleChangeOne(event){
         event.preventDefault()
         var id = event.target.value
-        this.state.pokemon1 = this.state.pokemonNames[id]
+        this.state.pokemon1 = id
 
     }
     //*Event Handler for selecting Pokemon 2
     handleChangeTwo(event){
         event.preventDefault()
         var id = event.target.value
-        this.state.pokemon2 = this.state.pokemonNames[id]
+        this.state.pokemon2 = id
     }
     handleClick(event){
         event.preventDefault()
-        //Todo: fetch and compare the pokemon type's damage relations
-        //Fetch the type for pokemon 1
+        //Todo: fetch and compare the pokemon attack stat
+        var attack1 = this.state.pokemonData[this.state.pokemon1 - 1]['attackStat']
+        var attack2 = this.state.pokemonData[this.state.pokemon2 - 1]['attackStat']
+        this.setState({buttonclicked: true})
+        if(attack1 > attack2){
+            this.setState({winner: this.state.pokemonData[this.state.pokemon1 - 1]['name']})
+        }else if(attack1 < attack2){
+            this.setState({winner: this.state.pokemonData[this.state.pokemon2 - 1]['name']})
+        }else{
+            this.setState({winner: 'Tie'})
+        }
+
         
     }
     render(){
@@ -56,6 +68,8 @@ class BattleComponent extends React.Component {
                 {/* Formatting the submit button to look pretty */}
                 <br></br>
                 <Button variant = "danger" type = "submit" onClick = {this.handleClick}>Battle!</Button>
+                {/*Displays the winner of the battle if the button is clicked */}
+                {this.state.buttonclicked? <h1>result: {this.state.winner}</h1>: <div/>}
                 
             </div>     
             

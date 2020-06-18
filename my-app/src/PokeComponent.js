@@ -10,15 +10,13 @@ class PokeComponent extends React.Component {
 	}
 
 	render() {
-		console.log(this.state)
-
 		return (
 			<div>
 				{this.state.pokemonIDs.map( (id)=>{
 					var index = id - 1
 					return (
 					//Passes props.state and props.id to the next page
-					<Link to= {`/${this.state.pokemonData[index].name}`}>
+					<Link to= {`/${this.state.pokemonData[index].name}` }>
 							<Button variant = "light">
 								<h3>{this.state.pokemonData[index].name}</h3>
 								<img src = {this.state.pokemonData[index].image}/>
