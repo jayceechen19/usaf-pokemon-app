@@ -9,6 +9,7 @@ import Navigation from './Navigation'
 import HomeComponent from './HomeComponent.js'
 import PokeComponent from './PokeComponent.js'
 import BattleComponent from './BattleComponent.js'
+import CollectionComponent from './CollectionComponent.js'
 import Pokemon from './Pokemon.js'
 
 //APIs
@@ -33,6 +34,7 @@ class App extends Component {
     this.addToCollection = this.addToCollection.bind(this)
   }
 
+  //*Adding a pokemon to the collect, this gets called in the Pokemon.js Component
   addToCollection(pokemon){
     this.collection = [...this.state.collection, pokemon]
     console.log(this.collection)
@@ -99,7 +101,7 @@ class App extends Component {
                   return <Route path = {`/${this.state.pokemonNames[id-1]}`} component = {() => 
                   <Pokemon state = {this.state} id = {id} collect = {this.addToCollection}/>}/>
             })}
-            <Route path = "/mycollection" component = {PokeComponent}/>
+            <Route path = "/mycollection" component = {() => <CollectionComponent state = {this.state}/>}/>
             <Route path = "/battle" component = {() =><BattleComponent state = {this.state}/>}/>
             <Route path = "/groceries" component = {PokeComponent}/>
           </Switch>
