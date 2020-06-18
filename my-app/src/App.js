@@ -32,14 +32,29 @@ class App extends Component {
       pokemonData : []
     }
     this.addToCollection = this.addToCollection.bind(this)
+    this.search = this.search.bind(this)
   }
 
+  //! Functionality needed by child components
   //*Adding a pokemon to the collect, this gets called in the Pokemon.js Component
   addToCollection(pokemon){
-    this.collection = [...this.state.collection, pokemon]
-    console.log(this.collection)
+    //Output to the console to make sure it's running
+    console.log('collecting')
+    // If we haven't collected yet, add to collection array
+    if (!this.state.collection.includes(pokemon)){
+      this.state.collection= [...this.state.collection, pokemon]
+    }else{
+      //Have this for debugging purposes, but prints an "error" if it already has the pokemon
+      console.log("Already contains pokemon")
+    }
   }
-
+  //* Searching for pokemon, show the pokemon that match the search name
+  search(searchInput){
+    console.log('searching')
+    if ()
+  }
+  
+  //!Initializiation
   //*Once the component is created, initialize this.state
   componentDidMount(){
      //Fulfilling a promise for each index/id
@@ -93,9 +108,9 @@ class App extends Component {
           {/* Creates the routes/ sub-pages */}
           <Switch>
             {/* Routes just create url paths, doesn't specify the directory */}
-            <Route path = "/home" component = {HomeComponent}/>
+            <Route path = "/home" component = {() => <HomeComponent state = {this.state}/>}/>
             <Route path = "/viewall" component = {() => <PokeComponent state = {this.state}/>}/>
-            {/* Create a route path for each pokemon, call on pokemon & pass in the pokemon */}
+            {/* Create a route path for each pokemon, call on pokemon & pass in the pokemon & the collection function */}
             {/* Map pokemon IDs, use the id to pull the correct index from pokemon/name */}
             {this.state.pokemonIDs.map(id => {
                   return <Route path = {`/${this.state.pokemonNames[id-1]}`} component = {() => 
@@ -103,7 +118,6 @@ class App extends Component {
             })}
             <Route path = "/mycollection" component = {() => <CollectionComponent state = {this.state}/>}/>
             <Route path = "/battle" component = {() =><BattleComponent state = {this.state}/>}/>
-            <Route path = "/groceries" component = {PokeComponent}/>
           </Switch>
       </div>
       </BrowserRouter>

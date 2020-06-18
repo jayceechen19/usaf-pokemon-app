@@ -17,9 +17,6 @@ const Navigation = () => {
             <NavLink to="/battle">
                 <Button variant = "primary">Battle</Button>
             </NavLink>
-            <NavLink to="/groceries">
-                <Button variant = "primary">Groceries</Button>
-            </NavLink>
            
        </div>
     );

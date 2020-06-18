@@ -8,15 +8,20 @@ class Pokemon extends React.Component {
 	  super(props);
 	  this.state = props.state;
 	  this.id = props.id
-	  this.collect = props.collect;
+	  this.collect = props.collect
 
 	  this.SimilarTypes = this.SimilarTypes.bind(this)
+	  this.collectionMethod = this.collectionMethod.bind(this)
 	}
 
     //*Event Handler for Viewing Similar Types
     SimilarTypes(event){
 		event.preventDefault();
 		console.log(this.state.pokemonData[this.id - 1]['type']);
+	}
+	collectionMethod(event){
+		event.preventDefault();
+		this.collect(this.state.pokemonData[this.id - 1])
 	}
 
 	render() {
@@ -30,7 +35,7 @@ class Pokemon extends React.Component {
 					<h5>Moves: {this.state.pokemonData[this.id - 1]['moves'].map(move=>{return move + ' '})}</h5>
 					<Button variant = "primary" type = "submit" onClick = {this.SimilarTypes}>View Similar Types</Button>
 					<br></br>
-					<Button variant = "warning" type = "submit" onClick = {this.collect(this.state.pokemonData[this.id - 1])}>Collect</Button>
+					<Button variant = "warning" type = "submit" onClick = {this.collectionMethod}>Collect</Button>
 			</div>
 			
 		);

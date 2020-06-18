@@ -8,6 +8,7 @@ class CollectionComponent extends React.Component{
         this.state = props.state
     }
     render(){
+        
         if (this.state.collection.length == 0){
             return(
             <div>
@@ -15,12 +16,22 @@ class CollectionComponent extends React.Component{
             </div>
             )
             
+        }else{
+            console.log(this.state.collection)
+            return(
+                <div>
+                    <h1>Your Collection: </h1>
+                    {this.state.collection.map(pokemon => {
+                        return (
+                        <div>
+                        <img src = {pokemon.image}/>
+                        <h4>{pokemon.name}</h4>
+                        </div>)
+                        })}
+                </div>
+            )
         }
-        return(
-            <div>
-                {this.collection.map(pokemon => <h4>{pokemon}</h4>)}
-            </div>
-        )
+        
     }
 }
 export default CollectionComponent

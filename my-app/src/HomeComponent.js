@@ -5,10 +5,15 @@ import Navigation from './Navigation'
 
 
 class HomeComponent extends React.Component {
+    constructor(props){
+        super(props)
+    }
     render(){
         return (
             <div> 
-                <h1>An Empty Home Page</h1>
+                <h2>Search a pokemon</h2>
+                <input type = "text"></input>{' '}
+                <Button variant = 'primary' type = 'submit'>Search</Button>
             </div>
         )
     }
